@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.sky</groupId>
+    <artifactId>sky-record-api</artifactId>
+    <version>${sky.version}</version>
+    <packaging>jar</packaging>
+
+    <name>sky-record-api</name>
+    <description>记录上传接口模块</description>
+
+    <parent>
+        <artifactId>sky-modules</artifactId>
+        <groupId>com.github.sky</groupId>
+        <version>${sky.version}</version>
+    </parent>
+
+    <dependencies>
+        <!--common基础包-->
+        <dependency>
+            <groupId>com.github.sky</groupId>
+            <artifactId>sky-common</artifactId>
+            <version>${sky.version}</version>
+        </dependency>
+        <!--feign-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+        <!--zipkin-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+        <!--MySQL-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
+</project>

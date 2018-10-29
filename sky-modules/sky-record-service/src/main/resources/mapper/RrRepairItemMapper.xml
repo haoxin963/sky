@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.sky.recordService.mapper.RrRepairItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.github.sky.recordService.entity.RrRepairItem">
+        <id column="item_id" property="itemId" />
+        <result column="record_id" property="recordId" />
+        <result column="maint_id" property="maintId" />
+        <result column="repairproject" property="repairproject" />
+        <result column="workinghours" property="workinghours" />
+        <result column="repairmark" property="repairmark" />
+        <result column="create_date" property="createDate" />
+        <result column="create_user" property="createUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="del_flag" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        item_id AS itemId, record_id AS recordId, maint_id AS maintId, repairproject, workinghours, repairmark, create_date AS createDate, create_user AS createUser, update_date AS updateDate, update_user AS updateUser, del_flag AS delFlag
+    </sql>
+
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.sky.rbac.mapper.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.github.sky.rbac.entity.SysUser">
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="password" property="password" />
+        <result column="phone" property="phone" />
+        <result column="user_image" property="userImage" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="last_login_ip" property="lastLoginIp" />
+        <result column="nick_name" property="nickName" />
+        <result column="email" property="email" />
+        <result column="create_date" property="createDate" />
+        <result column="create_user" property="createUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="del_flag" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id AS userId, user_name AS userName, password, phone, last_login_time AS lastLoginTime, last_login_ip AS lastLoginIp, nick_name AS nickName,user_image as userImage,email, create_date AS createDate, create_user AS createUser, update_date AS updateDate, update_user AS updateUser, del_flag AS delFlag
+    </sql>
+
+    <!-- userVo结果集 -->
+    <resultMap id="userVoResultMap" type="com.github.sky.common.vo.UserVO">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="username"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone" />
+        <result column="nick_name" property="nickName" />
+        <result column="user_image" property="userImage" />
+        <result column="email" property="email" />
+        <result column="create_date" property="createTime"/>
+        <result column="update_date" property="updateTime"/>
+        <result column="del_flag" property="delFlag"/>
+        <collection property="roleList"  ofType="com.github.sky.common.vo.RoleVO">
+            <id column="role_id" property="roleId" />
+            <result column="role_name" property="roleName" />
+            <result column="role_code" property="roleCode" />
+            <result column="role_desc" property="roleDesc" />
+            <result column="create_time" property="createTime" />
+            <result column="update_time" property="updateTime" />
+        </collection>
+    </resultMap>
+
+    <sql id="selectUserVo">
+        SELECT
+            `user`.user_id,
+            `user`.user_name,
+            `user`.`password`,
+            `user`.phone,
+            `user`.nick_name,
+            `user`.user_image,
+            `user`.email,
+            `user`.create_date,
+            `user`.update_date,
+            `user`.del_flag,
+            r.role_id,
+            r.role_name,
+            r.role_code,
+            r.role_desc,
+            r.create_time,
+            r.update_time
+        FROM
+            sys_user AS `user`
+            LEFT JOIN sys_user_role AS ur ON ur.user_id = `user`.user_id
+            LEFT JOIN sys_role AS r ON r.role_id = ur.role_id
+    </sql>
+
+    <select id="selectUserVoByUsername"  resultMap="userVoResultMap">
+          <include refid="selectUserVo"/>
+          WHERE `user`.user_name = #{username}
+    </select>
+
+
+</mapper>

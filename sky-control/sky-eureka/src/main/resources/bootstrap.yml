@@ -1,0 +1,61 @@
+server:
+  port: 1025
+
+spring:
+  application:
+    name: sky-eureka-server
+  profiles:
+    active: dev
+
+security:
+  basic:
+    enabled: true # 启用身份认证
+  user:
+    name: sky # 定义用户名
+    password: sky123 # 定义密码
+
+---
+spring:
+  profiles: dev
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://sky:sky123@localhost:1025/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  server:  #配置属性，但由于 Eureka 自我保护模式以及心跳周期长的原因，经常会遇到 Eureka Server 不剔除已关停的节点的问题
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000
+
+---
+spring:
+  profiles: test
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://sky:sky123@192.168.10.50:1025/eureka/,http://sky:sky123@192.168.10.51:1025/eureka #多个eureka的配置
+  server:  #配置属性，但由于 Eureka 自我保护模式以及心跳周期长的原因，经常会遇到 Eureka Server 不剔除已关停的节点的问题
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+---
+spring:
+  profiles: prd
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://sky:sky123@localhost:1025/eureka
+  instance:
+    hostname: localhost
+  server:  #配置属性，但由于 Eureka 自我保护模式以及心跳周期长的原因，经常会遇到 Eureka Server 不剔除已关停的节点的问题
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000

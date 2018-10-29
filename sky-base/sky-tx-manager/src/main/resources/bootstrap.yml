@@ -1,0 +1,84 @@
+server:
+  port: 7000
+
+spring:
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/static/
+  application:
+    name: tx-manager
+  profiles:
+    active: dev
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        service-id: sky-config-server
+        enabled: true
+      profile: ${spring.profiles.active}
+      label: ${spring.profiles.active}
+
+
+tm:
+  transaction:
+    netty:
+      delaytime: 5
+      hearttime: 15
+  redis:
+    savemaxtime: 30
+  socket:
+    port: 9998
+    maxconnection: 100
+  compensate:
+    auto: false
+    notifyUrl: http://ip:port/path
+    tryTime: 30
+    maxWaitTime: 5000
+
+---
+spring:
+  profiles: dev
+  redis:
+    remote: false        #cachecloud 获取
+    host: 192.168.10.74
+    port: 6379
+    password: redis0118
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://sky:sky123@localhost:1025/eureka
+    registry-fetch-interval-seconds: 10
+
+---
+spring:
+  profiles: test
+  redis:
+    remote: false        #cachecloud 获取
+    host: 192.168.10.74
+    port: 6379
+    password: redis0118
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://sky:sky123@192.168.10.50:1025/eureka/,http://sky:sky123@192.168.10.51:1025/eureka
+    registry-fetch-interval-seconds: 10
+---
+spring:
+  profiles: prd
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://sky:sky123@localhost:1025/eureka

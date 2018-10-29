@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.sky.recordService.mapper.RrRepairRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.github.sky.recordService.entity.RrRepairRecord">
+        <id column="record_id" property="recordId" />
+        <result column="maint_id" property="maintId" />
+        <result column="maint_name" property="maintName" />
+        <result column="maint_code" property="maintCode" />
+        <result column="vin" property="vin" />
+        <result column="vehicleplatenumber" property="vehicleplatenumber" />
+        <result column="repairdate" property="repairdate" />
+        <result column="repairrmileate" property="repairrmileate" />
+        <result column="settledate" property="settledate" />
+        <result column="faultdescription" property="faultdescription" />
+        <result column="costlistcode" property="costlistcode" />
+        <result column="repaircomefrom" property="repaircomefrom" />
+        <result column="repairtype" property="repairtype" />
+        <result column="repeirnature" property="repeirnature" />
+        <result column="create_date" property="createDate" />
+        <result column="create_user" property="createUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="del_flag" property="delFlag" />
+    </resultMap>
+
+    <!-- RecordVO结果集 -->
+    <resultMap id="recordVoResultMap" type="com.github.sky.common.vo.RecordVO">
+        <id column="record_id" property="recordid"/>
+        <result column="vehicleplatenumber" property="vehicleplatenumber"/>
+        <result column="maint_name" property="companyname"/>
+        <result column="maint_code" property="companycode"/>
+        <result column="maint_id" property="companyid"/>
+        <result column="vin" property="vin" />
+        <result column="repairdate" property="repairdate" />
+        <result column="repairrmileate" property="repairmileage"/>
+        <result column="settledate" property="settledate"/>
+        <result column="faultdescription" property="faultdescription"/>
+        <result column="costlistcode" property="costlistcode"/>
+        <result column="create_date" property="createdate"/>
+        <collection property="repairprojectlist" ofType="com.github.sky.common.vo.RepairProjectVO" javaType="java.util.List" column="{recordId=record_id,maintId=maint_id}" select="selectTtem"/>
+        <collection property="vehiclepartslist" ofType="com.github.sky.common.vo.VehiclePartsVO" javaType="java.util.List" column="{recordId=record_id,maintId=maint_id}" select="selectvehicleparts"/>
+    </resultMap>
+
+    <resultMap id="repairprojectMap" type="com.github.sky.common.vo.RepairProjectVO">
+        <result column="repairproject" property="repairproject" />
+        <result column="workinghours" property="workinghours" />
+    </resultMap>
+
+    <resultMap id="vehiclepartsMap" type="com.github.sky.common.vo.VehiclePartsVO">
+        <result column="partsname" property="partsname" />
+        <result column="partsquantity" property="partsquantity" />
+        <result column="partscode" property="partscode" />
+    </resultMap>
+
+    <!-- RecordVO查询sql -->
+    <sql id="selectRecordVO">
+        SELECT
+        r.record_id,
+        r.maint_id,
+        r.maint_name,
+        r.maint_code,
+        r.vin,
+        r.vehicleplatenumber,
+        r.repairdate,
+        r.repairrmileate,
+        r.settledate,
+        r.faultdescription,
+        r.costlistcode,
+        r.create_date
+        FROM
+        rr_repair_record AS r
+     </sql>
+
+    <select id="selectRecordVoPage" resultMap="recordVoResultMap" >
+        <include refid="selectRecordVO"/>
+        WHERE
+        r.del_flag = 0 and r.maint_id = #{maintId}
+        <if test="params.vin != null and params.vin != ''">
+            and r.vin LIKE CONCAT('%',#{params.vin},'%')
+        </if>
+        <if test="params.vehicleplatenumber != null and params.vehicleplatenumber != ''">
+            and r.vehicleplatenumber LIKE CONCAT('%',#{params.vehicleplatenumber},'%')
+        </if>
+        <if test="params.costlistcode != null and params.costlistcode != ''">
+            and r.costlistcode LIKE CONCAT('%',#{params.costlistcode},'%')
+        </if>
+        ORDER BY r.record_id DESC
+    </select>
+
+    <select id="selectTtem" resultMap="repairprojectMap" >
+      select i.* from rr_repair_item i where i.record_id = #{recordId} and i.maint_id = #{maintId}
+    </select>
+
+    <select id="selectvehicleparts" resultMap="vehiclepartsMap" >
+      select p.* from rr_repair_part p where p.record_id = #{recordId} and p.maint_id = #{maintId}
+    </select>
+
+    <select id="selectRecordVOByRecordId" resultMap="recordVoResultMap" >
+        <include refid="selectRecordVO"/>
+        WHERE
+        r.record_id =  #{recordId}
+    </select>
+
+</mapper>

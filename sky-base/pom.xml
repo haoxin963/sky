@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.sky</groupId>
+    <artifactId>sky-base</artifactId>
+    <version>${sky.version}</version>
+
+    <packaging>pom</packaging>
+
+    <name>sky-base</name>
+    <description>基础模块</description>
+
+    <parent>
+        <artifactId>sky</artifactId>
+        <groupId>com.github</groupId>
+        <version>${sky.version}</version>
+    </parent>
+
+    <modules>
+        <module>sky-auth</module>
+        <module>sky-common</module>
+        <module>sky-mc-service</module>
+        <module>sky-tx-manager</module>
+        <module>sky-tx-client</module>
+    </modules>
+
+
+</project>

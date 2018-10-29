@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: sky-zuul
+  profiles:
+    active: dev
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        service-id: sky-config-server
+        enabled: true
+      profile: ${spring.profiles.active}
+      label: ${spring.profiles.active}
+
+logging:
+  level: error
+
+---
+spring:
+  profiles: dev
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://sky:sky123@localhost:1025/eureka
+    registry-fetch-interval-seconds: 10
+#认证服务器地址
+security:
+  auth:
+    server: http://localhost:3000
+---
+spring:
+  profiles: test
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://sky:sky123@192.168.10.50:1025/eureka/,http://sky:sky123@192.168.10.51:1025/eureka
+    registry-fetch-interval-seconds: 10
+#认证服务器地址
+security:
+  auth:
+    server: http://localhost:3000
+---
+spring:
+  profiles: prd
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://sky:sky123@localhost:1025/eureka
+
+#建议使用ng负载均衡
+security:
+  auth:
+    server: http://localhost:3000
