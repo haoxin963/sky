@@ -58,7 +58,7 @@ sky
 - [jenkins](https://blog.csdn.net/haoxin963/article/details/81870545)
 - [ELK](https://blog.csdn.net/haoxin963/article/details/81506817)
 ## 启动说明
-### 1.环境及工具
+### 环境及工具
 - JDK: 1.8+
 - MAVEN: 3.3+
 - MYSQL: 5.7+
@@ -66,14 +66,16 @@ sky
 - RabbitMQ：3.7+
 - IDEA 2018(需要安装Lombok插件)
 - Postman
-### 2.启动顺序
+### 配置文件
+https://gitee.com/haoxin963/sky-config
+### 启动顺序
 - sky-eureka
 - sky-config
 - sky-rbac-service
 - sky-auth
 - sky-zuul
 - 其他模块
-### 3.docker+jenkins部署
+### docker+jenkins部署
 关注微信公众号查看
 ## 演示
 使用Postman调用接口
