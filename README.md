@@ -1,5 +1,6 @@
 # sky平台
-sky平台是基于spring cloud的微服务接口开发平台，平台的目标是在高并发，大数据场景下能水平扩展和服务高可用。
+sky平台是基于spring cloud的微服务接口开发平台，平台的目标是在高并发，大数据场景下支持水平扩展和服务高可用。
+
 平台包含API网关、统一权限认证、记录上传分库分表等多个模块，可以作为后端接口的开发脚手架或微服务学习入门框架。
 
 ## 功能列表
@@ -56,25 +57,25 @@ sky
 - [jenkins](https://blog.csdn.net/haoxin963/article/details/81870545)
 - [ELK](https://blog.csdn.net/haoxin963/article/details/81506817)
 ## 启动说明
-### 环境及工具
+### 1.环境及工具
 - JDK: 1.8+
 - MAVEN: 3.3+
 - MYSQL: 5.7+
 - Redis: 3.0+
 - RabbitMQ：3.7+
-- IDEA 2018(Lombok插件)
+- IDEA 2018(需要安装Lombok插件)
 - Postman
-### 启动顺序
+### 2.启动顺序
 - sky-eureka
 - sky-config
 - sky-rbac-service
 - sky-auth
 - sky-zuul
 - 其他模块
-### docker+jenkins部署
+### 3.docker+jenkins部署
 关注微信公众号查看
 ## 演示
-使用postman调用接口
+使用Postman调用接口
 - 1.用户注册
 URL：http://localhost:9999/restApi/record/registerUser
 - 2.获取Token
@@ -84,7 +85,7 @@ URL：http://localhost:9999/restApi/record/addRecord
 - 4.分页查询
 URL：http://localhost:9999/restApi/record/2/page
 - 5.详情查询
-URL：http://localhost:9999/restApi/record/2
+URL：http://localhost:9999/restApi/record/2/505425581337214976
 
 ### 有问题请在下方留言也可以微信公众号交流
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1029/211403_fad1d1b3_1207662.jpeg "qrcode_for_gh_0d1ad0d8e872_258.jpg")
