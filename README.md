@@ -1,6 +1,6 @@
-# sky
-sky是基于spring cloud的微服务接口开发平台，平台的目标是在高并发，大数据场景下能水平扩展和服务高可用。
-平台包含API网关、统一权限认证、记录上传分库分表等多个模块，可以作为后端接口的开发脚手架和微服务学习入门框架。
+# sky平台
+sky平台是基于spring cloud的微服务接口开发平台，平台的目标是在高并发，大数据场景下能水平扩展和服务高可用。
+平台包含API网关、统一权限认证、记录上传分库分表等多个模块，可以作为后端接口的开发脚手架或微服务学习入门框架。
 
 ## 功能列表
 - 服务注册发现：使用Eureka实现
@@ -42,7 +42,7 @@ sky
 ├    └── sky-record-service -- demo-记录服务
 ```
 ## 架构 
-![image.png](https://img-blog.csdnimg.cn/20181029172644223.png)
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1029/211344_a7376ab7_1207662.png "技术架构 (26).png")
 ## 核心技术
 - [Spring Cloud](https://blog.csdn.net/haoxin963/article/details/82217548) 
 - [RabbitMQ](https://blog.csdn.net/haoxin963/article/details/83351979) 
@@ -86,9 +86,8 @@ URL：http://localhost:9999/restApi/record/2/page
 - 5.详情查询
 URL：http://localhost:9999/restApi/record/2
 
-####有问题可以加在下方留言或关于微信公众号
-![image.png](https://img-blog.csdnimg.cn/20181029204135821.jpg)
-
+### 有问题请在下方留言也可以微信公众号交流
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1029/211403_fad1d1b3_1207662.jpeg "qrcode_for_gh_0d1ad0d8e872_258.jpg")
 
 
 
