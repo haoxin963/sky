@@ -25,6 +25,7 @@
         <module>sky-mc-service</module>
         <module>sky-tx-manager</module>
         <module>sky-tx-client</module>
+        <module>sky-elastic-job</module>
     </modules>
 
 
