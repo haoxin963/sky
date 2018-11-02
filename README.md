@@ -23,6 +23,7 @@ sky平台是基于spring cloud的微服务接口开发平台，平台的目标�
 - 消息服务：阿里鱼的短信服务
 - 日志管理，支持日保存ELK，图形化展示
 - 部署发布：使用docker+jenkins自动发布
+- 分布式任务调度：基于zookeeper的elastic-job实现
 ## 项目结构
 ``` lua
 sky
@@ -30,6 +31,7 @@ sky
 ├    ├── sky-auth -- 统一权限中心
 ├    ├── sky-common -- 公共模块
 ├    ├── sky-mc-service -- 消息中心模块
+├    ├── sky-elastic-job -- 分布式任务调度模块
 ├    └── sky-tx-client -- 分布式事务客户端模块
 ├    └── sky-tx-manager -- 分布式事务协调模块
 ├── sky-control -- spring cloud服务模块
@@ -57,6 +59,7 @@ sky
 - [docker](https://blog.csdn.net/haoxin963/article/details/81906667)
 - [jenkins](https://blog.csdn.net/haoxin963/article/details/81870545)
 - [ELK](https://blog.csdn.net/haoxin963/article/details/81506817)
+- [ZooKeeper ](https://blog.csdn.net/haoxin963/article/category/8239099)
 ## 启动说明
 ### 环境及工具
 - JDK: 1.8+
