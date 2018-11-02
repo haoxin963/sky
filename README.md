@@ -81,16 +81,22 @@ https://gitee.com/haoxin963/sky-config
 使用Postman调用接口
 - 1.用户注册
 URL：http://localhost:9999/restApi/record/registerUser
+![用户注册](https://images.gitee.com/uploads/images/2018/1030/135018_21174675_1207662.png "TIM截图20181030113252.png")
 - 2.获取Token
 URL：http://localhost:9999/auth/oauth/token
-- 3.上传
+![获取Token](https://images.gitee.com/uploads/images/2018/1030/135056_5b1387f9_1207662.png "TIM截图20181030131228.png")
+- 3.上传记录
 URL：http://localhost:9999/restApi/record/addRecord
+![上传记录](https://images.gitee.com/uploads/images/2018/1030/135113_6abca477_1207662.png "TIM截图20181030131409.png")
 - 4.分页查询
 URL：http://localhost:9999/restApi/record/2/page
+![分页查询](https://images.gitee.com/uploads/images/2018/1030/135138_087dfcb6_1207662.png "TIM截图20181030134322.png")
 - 5.详情查询
 URL：http://localhost:9999/restApi/record/2/505425581337214976
+![详情查询](https://images.gitee.com/uploads/images/2018/1030/135155_a1dae00c_1207662.png "TIM截图20181030134119.png")
+#### 接口详细调用demo:[查看](https://blog.csdn.net/haoxin963/article/details/83512953)
 
-### 有问题请在下方留言也可以微信公众号交流
+#### 有问题请在下方留言也可以微信公众号交流
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1029/211403_fad1d1b3_1207662.jpeg "qrcode_for_gh_0d1ad0d8e872_258.jpg")
 
 
