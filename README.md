@@ -46,7 +46,7 @@ sky
 ├    └── sky-record-service -- demo-记录服务
 ```
 ## 架构 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1029/211344_a7376ab7_1207662.png "技术架构 (26).png")
+![架构](https://images.gitee.com/uploads/images/2018/1104/203305_15a39046_1207662.png "技术架构 (32).png")
 ## 核心技术
 - [Spring Cloud](https://blog.csdn.net/haoxin963/article/details/82217548) 
 - [RabbitMQ](https://blog.csdn.net/haoxin963/article/details/83351979) 
