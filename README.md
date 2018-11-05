@@ -4,6 +4,13 @@ sky平台是基于spring cloud的微服务接口开发平台，平台的目标�
 
 平台包含API网关、统一权限认证、记录上传分库分表等多个模块，可以作为后端接口的开发脚手架或微服务学习入门框架。
 
+## 说明
+- 如果对您对此项目有兴趣，可以点 "Star" 支持一下 谢谢！ ^_^
+- 或者您可以 "follow" 一下，我会不断开源更多的有趣的项目
+- 如有问题请直接在 Issues 中提，或者您发现问题并有非常好的解决方案，欢迎 PR
+- sky-ui正在建设中，期待前端的伙伴能加入我们
+- QQ交流群：428135328
+
 ## 功能列表
 - 服务注册发现：使用Eureka实现
 - 配置文件：git和消息总线实现动态实时刷新
@@ -79,7 +86,7 @@ https://gitee.com/haoxin963/sky-config
 - sky-zuul
 - 其他模块
 ### docker+jenkins部署
-关注微信公众号查看
+欢迎进群交流：428135328(QQ群)
 ## 演示
 使用Postman调用接口
 - 1.用户注册
@@ -99,8 +106,8 @@ URL：http://localhost:9999/restApi/record/2/505425581337214976
 ![详情查询](https://images.gitee.com/uploads/images/2018/1030/135155_a1dae00c_1207662.png "TIM截图20181030134119.png")
 #### 接口详细调用demo:[查看](https://blog.csdn.net/haoxin963/article/details/83512953)
 
-#### 有问题请在下方留言也可以微信公众号交流
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1029/211403_fad1d1b3_1207662.jpeg "qrcode_for_gh_0d1ad0d8e872_258.jpg")
+
+
 
 
 
