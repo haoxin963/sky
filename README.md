@@ -86,7 +86,7 @@ https://gitee.com/haoxin963/sky-config
 - sky-zuul
 - 其他模块
 ### docker+jenkins部署
-关注微信公众号查看
+欢迎进群交流：428135328(QQ群)
 ## 演示
 使用Postman调用接口
 - 1.用户注册
