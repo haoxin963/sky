@@ -8,8 +8,11 @@ sky平台是基于spring cloud的微服务接口开发平台，平台的目标�
 - 如果对您对此项目有兴趣，可以点 "Star" 支持一下 谢谢！ ^_^
 - 或者您可以 "follow" 一下，我会不断开源更多的有趣的项目
 - 如有问题请直接在 Issues 中提，或者您发现问题并有非常好的解决方案，欢迎 PR
-- sky-ui正在建设中，期待前端的伙伴能加入我们
 - QQ交流群：428135328
+
+## 相关项目
+- 前端ui：https://gitee.com/haoxin963/sky-ui
+- 配置git：https://gitee.com/haoxin963/sky-config
 
 ## 功能列表
 - 服务注册发现：使用Eureka实现
@@ -76,8 +79,6 @@ sky
 - RabbitMQ：3.7+
 - IDEA 2018(需要安装Lombok插件)
 - Postman
-### 配置文件
-https://gitee.com/haoxin963/sky-config
 ### 启动顺序
 - sky-eureka
 - sky-config
@@ -87,6 +88,8 @@ https://gitee.com/haoxin963/sky-config
 - 其他模块
 ### docker+jenkins部署
 欢迎进群交流：428135328(QQ群)
+## 前端
+
 ## 演示
 使用Postman调用接口
 - 1.用户注册
