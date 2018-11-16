@@ -15,6 +15,7 @@ sky平台是基于spring cloud的微服务接口开发平台，平台的目标�
 - 配置git：https://gitee.com/haoxin963/sky-config
 
 ## 功能列表
+- 代码生成 ：可生成java代码和前端vue代码，单表CURD基本不需要编码
 - 服务注册发现：使用Eureka实现
 - 配置文件：git和消息总线实现动态实时刷新
 - 统一网关：支持多端流量控制的zuul网关服务
@@ -27,7 +28,6 @@ sky平台是基于spring cloud的微服务接口开发平台，平台的目标�
 - 分布式锁：Redis+Redisson实现分布式锁
 - 分布式事务：lcn分布式事务
 - 分布式ID：Twitter的snowflake算法
-- CRUD ：mybatis-plus的增删改查，分页，代码生成
 - 接口文档：使用swagger文档管理
 - 缓存服务：RedisTemplate+SpringCache
 - 消息服务：阿里鱼的短信服务
