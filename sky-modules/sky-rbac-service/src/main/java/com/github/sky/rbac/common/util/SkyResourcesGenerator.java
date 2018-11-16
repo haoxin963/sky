@@ -2,12 +2,15 @@ package com.github.sky.rbac.common.util;
 
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.GlobalConfig;
-import com.baomidou.mybatisplus.generator.config.PackageConfig;
-import com.baomidou.mybatisplus.generator.config.StrategyConfig;
+import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Auther: haoxin
@@ -19,6 +22,7 @@ public class SkyResourcesGenerator {
 
     public static void main(String[] args) {
         String outputDir = "d:/sky/temp";
+        final String viewOutputDir = outputDir + "/view/";
         AutoGenerator mpg = new AutoGenerator();
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
@@ -64,11 +68,35 @@ public class SkyResourcesGenerator {
             }
         };
 
+        // 生成的模版路径，不存在时需要先新建
+        File viewDir = new File(viewOutputDir);
+        if (!viewDir.exists()) {
+            viewDir.mkdirs();
+        }
+        List<FileOutConfig> focList = new ArrayList<FileOutConfig>();
+        focList.add(new FileOutConfig("/templates/listvue.vue.vm") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                return getGeneratorViewPath(viewOutputDir, tableInfo, ".vue");
+            }
+        });
+        cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
 
         //生成controller相关
         mpg.execute();
     }
 
-
+    /**
+     * 页面生成的文件名
+     */
+    private static String getGeneratorViewPath(String viewOutputDir, TableInfo tableInfo, String suffixPath) {
+        String name = StringUtils.firstToLowerCase(tableInfo.getEntityName());
+        String path = viewOutputDir + "/" + name + "/index"  + suffixPath;
+        File viewDir = new File(path).getParentFile();
+        if (!viewDir.exists()) {
+            viewDir.mkdirs();
+        }
+        return path;
+    }
 }
