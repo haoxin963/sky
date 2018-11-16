@@ -10,10 +10,57 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-10-29 14:18:59
+Date: 2018-11-16 13:06:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for job_execution_log
+-- ----------------------------
+DROP TABLE IF EXISTS `job_execution_log`;
+CREATE TABLE `job_execution_log` (
+  `id` varchar(40) NOT NULL,
+  `job_name` varchar(100) NOT NULL,
+  `task_id` varchar(255) NOT NULL,
+  `hostname` varchar(255) NOT NULL,
+  `ip` varchar(50) NOT NULL,
+  `sharding_item` int(11) NOT NULL,
+  `execution_source` varchar(20) NOT NULL,
+  `failure_cause` varchar(4000) DEFAULT NULL,
+  `is_success` int(11) NOT NULL,
+  `start_time` timestamp NULL DEFAULT NULL,
+  `complete_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of job_execution_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for job_status_trace_log
+-- ----------------------------
+DROP TABLE IF EXISTS `job_status_trace_log`;
+CREATE TABLE `job_status_trace_log` (
+  `id` varchar(40) NOT NULL,
+  `job_name` varchar(100) NOT NULL,
+  `original_task_id` varchar(255) NOT NULL,
+  `task_id` varchar(255) NOT NULL,
+  `slave_id` varchar(50) NOT NULL,
+  `source` varchar(50) NOT NULL,
+  `execution_type` varchar(20) NOT NULL,
+  `sharding_item` varchar(100) NOT NULL,
+  `state` varchar(20) NOT NULL,
+  `message` varchar(4000) DEFAULT NULL,
+  `creation_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `TASK_ID_STATE_INDEX` (`task_id`,`state`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of job_status_trace_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -41,7 +88,11 @@ CREATE TABLE `sys_menu` (
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES ('1', '上传记录', '', null, '/restApi/record/addRecord*', 'POST', null, null, null, null, '1', '2017-11-08 09:52:09', '2018-10-26 15:39:32', '0');
-INSERT INTO `sys_menu` VALUES ('2', '查询记录', '', null, '/restApi/record/*', 'GET', null, null, null, null, '1', '2018-01-20 14:56:59', '2018-10-29 14:10:37', '0');
+INSERT INTO `sys_menu` VALUES ('2', '查询记录', '', null, '/restApi/record/**', 'GET', null, null, null, null, '1', '2018-01-20 14:56:59', '2018-11-16 11:01:52', '0');
+INSERT INTO `sys_menu` VALUES ('3', '系统管理', '', '/rbac', '', '', '-1', 'icon-xitongguanli', 'Layout', '1', '0', '2017-11-07 20:56:00', '2018-11-07 16:11:01', '0');
+INSERT INTO `sys_menu` VALUES ('4', '用户管理', '', 'user', '/rbac/user/**', 'GET', '1', 'icon-yonghuguanli', 'views/admin/user/index', '2', '0', '2017-11-02 22:24:37', '2018-11-07 17:25:44', '0');
+INSERT INTO `sys_menu` VALUES ('5', '菜单管理', '', 'menu', '/rbac/menu/**', 'GET', '1', 'icon-caidanguanli', 'views/admin/menu/index', '3', '0', '2017-11-08 09:57:27', '2018-11-07 17:25:45', '0');
+INSERT INTO `sys_menu` VALUES ('6', '角色管理', '', 'role', '/rbac/role/**', 'GET', '1', 'icon-jiaoseguanli', 'views/admin/role/index', '4', '0', '2017-11-08 10:13:37', '2018-11-07 17:27:01', '0');
 
 -- ----------------------------
 -- Table structure for sys_oauth_client_details
@@ -82,12 +133,12 @@ CREATE TABLE `sys_role` (
   `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识（0-正常,1-删除）',
   PRIMARY KEY (`role_id`),
   UNIQUE KEY `role_idx1_role_code` (`role_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', 'admin', 'ROLE_ADMIN', '超级管理员', '2017-10-29 15:45:51', '2018-04-22 11:40:29', '0');
+INSERT INTO `sys_role` VALUES ('1', 'admin', 'admin', '超级管理员1', '2017-10-29 15:45:51', '2018-11-14 17:08:43', '0');
 INSERT INTO `sys_role` VALUES ('2', 'rest', 'REST', 'rest接口', '2018-04-20 07:14:32', '2018-10-26 15:41:49', '0');
 
 -- ----------------------------
@@ -103,6 +154,12 @@ CREATE TABLE `sys_role_menu` (
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
+INSERT INTO `sys_role_menu` VALUES ('1', '1');
+INSERT INTO `sys_role_menu` VALUES ('1', '2');
+INSERT INTO `sys_role_menu` VALUES ('1', '3');
+INSERT INTO `sys_role_menu` VALUES ('1', '4');
+INSERT INTO `sys_role_menu` VALUES ('1', '5');
+INSERT INTO `sys_role_menu` VALUES ('1', '6');
 INSERT INTO `sys_role_menu` VALUES ('2', '1');
 INSERT INTO `sys_role_menu` VALUES ('2', '2');
 
@@ -127,14 +184,15 @@ CREATE TABLE `sys_user` (
   `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '是否有效(0-未删除，1-已删除)',
   PRIMARY KEY (`user_id`),
   KEY `user_name` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COMMENT='用户信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COMMENT='用户信息表';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$inY5j/9VEE5VCyRReD79EeGwijRMLlNN4CcWvvoUMQsk2HiHWocc2', '18500367895', '2018-10-25 18:37:13', '', 'admin', '', '', '2018-09-29 16:31:43', '1', '2018-09-29 16:31:46', null, '0');
+INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$inY5j/9VEE5VCyRReD79EeGwijRMLlNN4CcWvvoUMQsk2HiHWocc2', '18500367895', '2018-10-25 18:37:13', '', 'admin1', '', '525899665@qq.com', '2018-09-29 16:31:43', '1', '2018-11-16 11:01:09', null, '0');
 INSERT INTO `sys_user` VALUES ('2', 'test', '$2a$10$S/oOIrzfFKx70BrKHW8Er.b/.pYD.N7CnjBa9nklXV8SM8ikf4vHC', null, null, null, null, null, null, '2018-10-26 14:14:52', null, '2018-10-26 14:14:52', null, '0');
 INSERT INTO `sys_user` VALUES ('37', 'test1', '$2a$10$9B8udMNPlR8rZQFTqIcthu5Iccc0IYz4iEWyOHcIzUrg426YHCEUu', null, null, null, null, null, null, '2018-10-29 14:06:24', null, '2018-10-29 14:06:24', null, '0');
+INSERT INTO `sys_user` VALUES ('38', 'test3', '$2a$10$vKGLIfdS5ZJWgQ9LrgzaYeUVqhU1/5DLgWyXZLNXZyO7y82dbESke', null, null, null, null, null, null, '2018-10-30 11:31:52', null, '2018-11-16 11:01:13', null, '1');
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -150,8 +208,9 @@ CREATE TABLE `sys_user_role` (
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES ('1', '1');
-INSERT INTO `sys_user_role` VALUES ('2', '2');
+INSERT INTO `sys_user_role` VALUES ('2', '1');
 INSERT INTO `sys_user_role` VALUES ('37', '2');
+INSERT INTO `sys_user_role` VALUES ('38', '2');
 
 -- ----------------------------
 -- Table structure for zipkin_annotations
@@ -188,102 +247,6 @@ CREATE TABLE `zipkin_annotations` (
 -- ----------------------------
 -- Records of zipkin_annotations
 -- ----------------------------
-INSERT INTO `zipkin_annotations` VALUES ('0', '-3693830684733373707', '-3693830684733373707', 'lc', 0x72786A617661, '6', '1540276390545000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-3693830684733373707', '-3693830684733373707', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276390545000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-5349148889329074346', '-5349148889329074346', 'lc', 0x72786A617661, '6', '1540276394545000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-5349148889329074346', '-5349148889329074346', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276394545000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '527625637083776786', '527625637083776786', 'lc', 0x72786A617661, '6', '1540276399044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '527625637083776786', '527625637083776786', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276399044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-2624265059132153927', '-2624265059132153927', 'lc', 0x72786A617661, '6', '1540276403044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-2624265059132153927', '-2624265059132153927', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276403044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'cs', null, '-1', '1540276403166000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'cr', null, '-1', '1540276403173000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'http.method', 0x504F5354, '6', '1540276403166000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'http.path', 0x2F7265737473657276696365732F746F6B656E, '6', '1540276403166000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'http.status_code', 0x353033, '6', '1540276403166000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'http.url', 0x2F7265737473657276696365732F746F6B656E, '6', '1540276403166000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'lc', 0x7A75756C, '6', '1540276403166000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2874671207276830102', '3406238328981916598', 'spring.instance_id', 0x3139322E3136382E31302E35303A716364612D676174657761793A39393939, '6', '1540276403166000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '4828440306962546423', '4828440306962546423', 'lc', 0x72786A617661, '6', '1540276406044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '4828440306962546423', '4828440306962546423', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276406044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '3408618531279535526', '3408618531279535526', 'lc', 0x72786A617661, '6', '1540276406544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '3408618531279535526', '3408618531279535526', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276406544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'sr', null, '-1', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'ss', null, '-1', '1540276407132522', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'http.host', 0x3139322E3136382E31302E3530, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'http.method', 0x474554, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'http.path', 0x2F757365722F66696E64557365724279557365726E616D652F313131313131313131313131303037, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'http.status_code', 0x323030, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'http.url', 0x687474703A2F2F3139322E3136382E31302E35303A383030332F757365722F66696E64557365724279557365726E616D652F313131313131313131313131303037, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'mvc.controller.class', 0x55736572436F6E74726F6C6C6572, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'mvc.controller.method', 0x66696E64557365724279557365726E616D65, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5477836435878903205', '5477836435878903205', 'spring.instance_id', 0x3139322E3136382E31302E35303A716364612D726261632D736572766963653A38303033, '6', '1540276407067000', '-1062729166', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'sr', null, '-1', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'ss', null, '-1', '1540276409573454', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'http.host', 0x3139322E3136382E31302E3531, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'http.method', 0x474554, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'http.path', 0x2F757365722F66696E64557365724279557365726E616D652F313131313131313131313131303037, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'http.status_code', 0x323030, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'http.url', 0x687474703A2F2F3139322E3136382E31302E35313A383030332F757365722F66696E64557365724279557365726E616D652F313131313131313131313131303037, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'mvc.controller.class', 0x55736572436F6E74726F6C6C6572, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'mvc.controller.method', 0x66696E64557365724279557365726E616D65, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1834303823889076620', '1834303823889076620', 'spring.instance_id', 0x3139322E3136382E31302E35313A716364612D726261632D736572766963653A38303033, '6', '1540276409552000', '-1062729165', null, '8003', 'qcda-rbac-service');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-8847934302990295813', '-8847934302990295813', 'lc', 0x72786A617661, '6', '1540276416544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-8847934302990295813', '-8847934302990295813', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276416544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-2501238671350282139', '-2501238671350282139', 'lc', 0x72786A617661, '6', '1540276421044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-2501238671350282139', '-2501238671350282139', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276421044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-4756973990384537192', '-4756973990384537192', 'lc', 0x72786A617661, '6', '1540276424044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-4756973990384537192', '-4756973990384537192', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276424044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-1676714589389774224', '-1676714589389774224', 'lc', 0x72786A617661, '6', '1540276428544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-1676714589389774224', '-1676714589389774224', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276428544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-4245219222448749449', '-4245219222448749449', 'lc', 0x72786A617661, '6', '1540276431044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-4245219222448749449', '-4245219222448749449', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276431044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-4748024178585333365', '-4748024178585333365', 'lc', 0x72786A617661, '6', '1540276431544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-4748024178585333365', '-4748024178585333365', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276431544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-3950906354848936684', '-3950906354848936684', 'lc', 0x72786A617661, '6', '1540276440044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-3950906354848936684', '-3950906354848936684', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276440044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-8460617070372484554', '-8460617070372484554', 'lc', 0x72786A617661, '6', '1540276444044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-8460617070372484554', '-8460617070372484554', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276444044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '6294275827123034153', '6294275827123034153', 'lc', 0x72786A617661, '6', '1540276448044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '6294275827123034153', '6294275827123034153', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276448044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6374991834511147977', '-6374991834511147977', 'lc', 0x72786A617661, '6', '1540276452043000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6374991834511147977', '-6374991834511147977', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276452043000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6678023472513427057', '-6678023472513427057', 'lc', 0x72786A617661, '6', '1540276455043000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6678023472513427057', '-6678023472513427057', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276455043000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '7746064167742453453', '7746064167742453453', 'lc', 0x72786A617661, '6', '1540276462543000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '7746064167742453453', '7746064167742453453', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276462543000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5488696713830785379', '5488696713830785379', 'lc', 0x72786A617661, '6', '1540276462543000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '5488696713830785379', '5488696713830785379', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276462543000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-5762277176725721721', '-5762277176725721721', 'lc', 0x72786A617661, '6', '1540276468044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-5762277176725721721', '-5762277176725721721', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276468044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '6258920026642908808', '6258920026642908808', 'lc', 0x72786A617661, '6', '1540276468544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '6258920026642908808', '6258920026642908808', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276468544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '7671915850724881635', '7671915850724881635', 'lc', 0x72786A617661, '6', '1540276472544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '7671915850724881635', '7671915850724881635', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276472544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2191374823085449166', '2191374823085449166', 'lc', 0x72786A617661, '6', '1540276476044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2191374823085449166', '2191374823085449166', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276476044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-951835506215741733', '-951835506215741733', 'lc', 0x72786A617661, '6', '1540276476044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-951835506215741733', '-951835506215741733', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276476044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-5148586091517556977', '-5148586091517556977', 'lc', 0x72786A617661, '6', '1540276479544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-5148586091517556977', '-5148586091517556977', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276479544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '137369103037570058', '137369103037570058', 'lc', 0x72786A617661, '6', '1540276483544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '137369103037570058', '137369103037570058', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276483544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-1436509535674043838', '-1436509535674043838', 'lc', 0x72786A617661, '6', '1540276491544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-1436509535674043838', '-1436509535674043838', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276491544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '4201544735715390979', '4201544735715390979', 'lc', 0x72786A617661, '6', '1540276496044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '4201544735715390979', '4201544735715390979', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276496044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1883203013478571280', '1883203013478571280', 'lc', 0x72786A617661, '6', '1540276499044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '1883203013478571280', '1883203013478571280', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276499044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6084179574517791155', '-6084179574517791155', 'lc', 0x72786A617661, '6', '1540276503543000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6084179574517791155', '-6084179574517791155', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276503543000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2143996804839518958', '2143996804839518958', 'lc', 0x72786A617661, '6', '1540276506044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2143996804839518958', '2143996804839518958', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276506044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6352286269211428847', '-6352286269211428847', 'lc', 0x72786A617661, '6', '1540276506544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '-6352286269211428847', '-6352286269211428847', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276506544000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2010203414694443433', '2010203414694443433', 'lc', 0x72786A617661, '6', '1540276515043000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2010203414694443433', '2010203414694443433', 'thread', 0x5278496F5363686564756C65722D34, '6', '1540276515043000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2835884011311693828', '2835884011311693828', 'lc', 0x72786A617661, '6', '1540276519044000', '-1062729166', null, '9999', 'qcda-gateway');
-INSERT INTO `zipkin_annotations` VALUES ('0', '2835884011311693828', '2835884011311693828', 'thread', 0x5278496F5363686564756C65722D32, '6', '1540276519044000', '-1062729166', null, '9999', 'qcda-gateway');
 
 -- ----------------------------
 -- Table structure for zipkin_dependencies
@@ -330,40 +293,3 @@ CREATE TABLE `zipkin_spans` (
 -- ----------------------------
 -- Records of zipkin_spans
 -- ----------------------------
-INSERT INTO `zipkin_spans` VALUES ('0', '-8847934302990295813', '-8847934302990295813', 'rxjava', null, null, '1540276416544000', '647');
-INSERT INTO `zipkin_spans` VALUES ('0', '-8460617070372484554', '-8460617070372484554', 'rxjava', null, null, '1540276444044000', '414');
-INSERT INTO `zipkin_spans` VALUES ('0', '-6678023472513427057', '-6678023472513427057', 'rxjava', null, null, '1540276455043000', '407');
-INSERT INTO `zipkin_spans` VALUES ('0', '-6374991834511147977', '-6374991834511147977', 'rxjava', null, null, '1540276452043000', '501');
-INSERT INTO `zipkin_spans` VALUES ('0', '-6352286269211428847', '-6352286269211428847', 'rxjava', null, null, '1540276506544000', '392');
-INSERT INTO `zipkin_spans` VALUES ('0', '-6084179574517791155', '-6084179574517791155', 'rxjava', null, null, '1540276503543000', '328');
-INSERT INTO `zipkin_spans` VALUES ('0', '-5762277176725721721', '-5762277176725721721', 'rxjava', null, null, '1540276468044000', '455');
-INSERT INTO `zipkin_spans` VALUES ('0', '-5349148889329074346', '-5349148889329074346', 'rxjava', null, null, '1540276394545000', '669');
-INSERT INTO `zipkin_spans` VALUES ('0', '-5148586091517556977', '-5148586091517556977', 'rxjava', null, null, '1540276479544000', '438');
-INSERT INTO `zipkin_spans` VALUES ('0', '-4756973990384537192', '-4756973990384537192', 'rxjava', null, null, '1540276424044000', '267');
-INSERT INTO `zipkin_spans` VALUES ('0', '-4748024178585333365', '-4748024178585333365', 'rxjava', null, null, '1540276431544000', '489');
-INSERT INTO `zipkin_spans` VALUES ('0', '-4245219222448749449', '-4245219222448749449', 'rxjava', null, null, '1540276431044000', '663');
-INSERT INTO `zipkin_spans` VALUES ('0', '-3950906354848936684', '-3950906354848936684', 'rxjava', null, null, '1540276440044000', '340');
-INSERT INTO `zipkin_spans` VALUES ('0', '-3693830684733373707', '-3693830684733373707', 'rxjava', null, null, '1540276390545000', '592');
-INSERT INTO `zipkin_spans` VALUES ('0', '-2624265059132153927', '-2624265059132153927', 'rxjava', null, null, '1540276403044000', '545');
-INSERT INTO `zipkin_spans` VALUES ('0', '-2501238671350282139', '-2501238671350282139', 'rxjava', null, null, '1540276421044000', '435');
-INSERT INTO `zipkin_spans` VALUES ('0', '-1676714589389774224', '-1676714589389774224', 'rxjava', null, null, '1540276428544000', '421');
-INSERT INTO `zipkin_spans` VALUES ('0', '-1436509535674043838', '-1436509535674043838', 'rxjava', null, null, '1540276491544000', '352');
-INSERT INTO `zipkin_spans` VALUES ('0', '-951835506215741733', '-951835506215741733', 'rxjava', null, null, '1540276476044000', '352');
-INSERT INTO `zipkin_spans` VALUES ('0', '137369103037570058', '137369103037570058', 'rxjava', null, null, '1540276483544000', '364');
-INSERT INTO `zipkin_spans` VALUES ('0', '527625637083776786', '527625637083776786', 'rxjava', null, null, '1540276399044000', '701');
-INSERT INTO `zipkin_spans` VALUES ('0', '1834303823889076620', '1834303823889076620', 'http:/user/finduserbyusername/111111111111007', null, null, '1540276409552000', '21454');
-INSERT INTO `zipkin_spans` VALUES ('0', '1883203013478571280', '1883203013478571280', 'rxjava', null, null, '1540276499044000', '289');
-INSERT INTO `zipkin_spans` VALUES ('0', '2010203414694443433', '2010203414694443433', 'rxjava', null, null, '1540276515043000', '270');
-INSERT INTO `zipkin_spans` VALUES ('0', '2143996804839518958', '2143996804839518958', 'rxjava', null, null, '1540276506044000', '274');
-INSERT INTO `zipkin_spans` VALUES ('0', '2191374823085449166', '2191374823085449166', 'rxjava', null, null, '1540276476044000', '392');
-INSERT INTO `zipkin_spans` VALUES ('0', '2835884011311693828', '2835884011311693828', 'rxjava', null, null, '1540276519044000', '443');
-INSERT INTO `zipkin_spans` VALUES ('0', '2874671207276830102', '3406238328981916598', 'http:/auth/restservices/token', '2874671207276830102', null, '1540276403166000', '7000');
-INSERT INTO `zipkin_spans` VALUES ('0', '3408618531279535526', '3408618531279535526', 'rxjava', null, null, '1540276406544000', '855');
-INSERT INTO `zipkin_spans` VALUES ('0', '4201544735715390979', '4201544735715390979', 'rxjava', null, null, '1540276496044000', '363');
-INSERT INTO `zipkin_spans` VALUES ('0', '4828440306962546423', '4828440306962546423', 'rxjava', null, null, '1540276406044000', '485');
-INSERT INTO `zipkin_spans` VALUES ('0', '5477836435878903205', '5477836435878903205', 'http:/user/finduserbyusername/111111111111007', null, null, '1540276407067000', '65522');
-INSERT INTO `zipkin_spans` VALUES ('0', '5488696713830785379', '5488696713830785379', 'rxjava', null, null, '1540276462543000', '288');
-INSERT INTO `zipkin_spans` VALUES ('0', '6258920026642908808', '6258920026642908808', 'rxjava', null, null, '1540276468544000', '437');
-INSERT INTO `zipkin_spans` VALUES ('0', '6294275827123034153', '6294275827123034153', 'rxjava', null, null, '1540276448044000', '539');
-INSERT INTO `zipkin_spans` VALUES ('0', '7671915850724881635', '7671915850724881635', 'rxjava', null, null, '1540276472544000', '424');
-INSERT INTO `zipkin_spans` VALUES ('0', '7746064167742453453', '7746064167742453453', 'rxjava', null, null, '1540276462543000', '415');
