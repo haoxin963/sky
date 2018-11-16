@@ -4,22 +4,28 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.sky.common.constant.CommonConstant;
 import com.github.sky.common.util.exception.RRException;
+import com.github.sky.common.vo.MenuVO;
+import com.github.sky.common.vo.RoleVO;
 import com.github.sky.common.vo.UserVO;
+import com.github.sky.rbac.dto.UserInfo;
 import com.github.sky.rbac.entity.SysRole;
 import com.github.sky.rbac.entity.SysUser;
 import com.github.sky.rbac.entity.SysUserRole;
 import com.github.sky.rbac.mapper.SysRoleMapper;
 import com.github.sky.rbac.mapper.SysUserMapper;
 import com.github.sky.rbac.mapper.SysUserRoleMapper;
+import com.github.sky.rbac.service.SysMenuService;
 import com.github.sky.rbac.service.SysUserService;
+import com.xiaoleilu.hutool.collection.CollectionUtil;
+import com.xiaoleilu.hutool.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Auther: haoxin
@@ -74,6 +80,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         return true;
     }
+
+    @Override
+    public UserInfo findUserInfo(UserVO userVo) {
+        SysUser condition = new SysUser();
+        condition.setUserName(userVo.getUsername());
+        SysUser sysUser = this.selectOne(new EntityWrapper<>(condition));
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setSysUser(sysUser);
+        //设置角色列表
+        List<RoleVO> roleList = userVo.getRoleList();
+        List<String> roleNames = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(roleList)) {
+            for (RoleVO sysRole : roleList) {
+                roleNames.add(sysRole.getRoleName());
+            }
+        }
+        String[] roles = roleNames.toArray(new String[roleNames.size()]);
+        userInfo.setRoles(roles);
+        return userInfo;    }
 
 
 }

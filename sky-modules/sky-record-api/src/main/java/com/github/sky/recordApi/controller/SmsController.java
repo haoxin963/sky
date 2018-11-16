@@ -22,7 +22,7 @@ public class SmsController extends BaseController {
     @PostMapping("/send")
     public R<String> send(String mobile) {
         Long userId = getUserId();
-        UserVO user = getUserVOByUserId(String.valueOf(userId));
+        UserVO user = getUserVO();
         logger.info("userId=>"+userId);
         logger.info("user=>"+user.toString());
         return new R<>(SmsUtil.sendVerificationCode(mobile));

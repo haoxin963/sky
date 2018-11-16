@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
+import java.util.List;
 
 /**
  * @Auther: haoxin
@@ -15,6 +16,21 @@ import java.util.Base64;
  */
 @Slf4j
 public class UserUtils {
+
+    /**
+     * 根据请求heard中的token获取用户角色
+     *
+     * @param httpServletRequest request
+     * @return 角色名
+     */
+    public static List<String> getRole(HttpServletRequest httpServletRequest) {
+        String token = getToken(httpServletRequest);
+        String key = Base64.getEncoder().encodeToString(CommonConstant.SIGN_KEY.getBytes());
+        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        List<String> roleNames = (List<String>) claims.get("authorities");
+        return roleNames;
+    }
+
     /**
      * 根据header中的token获取用户ID
      *

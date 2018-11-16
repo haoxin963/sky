@@ -1,0 +1,86 @@
+package $!{package.Controller};
+import java.util.Map;
+import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import com.github.sky.common.constant.CommonConstant;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.github.sky.common.util.Query;
+import com.github.sky.common.util.R;
+import $!{package.Entity}.$!{entity};
+import $!{package.Service}.I$!{entity}Service;
+#if($!{superControllerClassPackage})
+import $!{superControllerClassPackage};
+#end
+
+/**
+ * @Auther: $!{author}
+ * @Date: $!{date}
+ * @Description: $!{table.comment}控制器
+ */
+@RestController
+@RequestMapping("/$!{table.entityPath}")
+public class $!{table.controllerName} extends $!{superControllerClass} {
+    @Autowired
+    private I$!{entity}Service $!{table.entityPath}Service;
+
+    /**
+    * 通过ID查询
+    *
+    * @param id ID
+    * @return $!{entity}
+    */
+    @GetMapping("/{id}")
+    public R<$!{entity}> get(@PathVariable Integer id) {
+        return new R<>($!{table.entityPath}Service.selectById(id));
+    }
+
+
+    /**
+    * 分页查询信息
+    *
+    * @param params 分页对象
+    * @return 分页对象
+    */
+    @RequestMapping("/page")
+    public R<Page> page(@RequestParam Map<String, Object> params) {
+        params.put(CommonConstant.DEL_FLAG, CommonConstant.STATUS_NORMAL);
+        return new R<>($!{table.entityPath}Service.selectPage(new Query<>(params), new EntityWrapper<>()));
+    }
+
+    /**
+     * 添加
+     * @param  $!{table.entityPath}  实体
+     * @return success/false
+     */
+    @PostMapping
+    public R<Boolean> add(@RequestBody $!{entity} $!{table.entityPath}) {
+        return new R<>($!{table.entityPath}Service.insert($!{table.entityPath}));
+    }
+
+    /**
+     * 删除
+     * @param id ID
+     * @return success/false
+     */
+    @DeleteMapping("/{id}")
+    public R<Boolean> delete(@PathVariable Integer id) {
+        $!{entity} $!{table.entityPath} = new $!{entity}();
+        $!{table.entityPath}.setId(id);
+        $!{table.entityPath}.setUpdateTime(new Date());
+        $!{table.entityPath}.setDelFlag(CommonConstant.STATUS_DEL);
+        return new R<>($!{table.entityPath}Service.updateById($!{table.entityPath}));
+    }
+
+    /**
+     * 编辑
+     * @param  $!{table.entityPath}  实体
+     * @return success/false
+     */
+    @PutMapping
+    public R<Boolean> edit(@RequestBody $!{entity} $!{table.entityPath}) {
+        $!{table.entityPath}.setUpdateTime(new Date());
+        return new R<>($!{table.entityPath}Service.updateById($!{table.entityPath}));
+    }
+}

@@ -3,6 +3,7 @@ package com.github.sky.rbac.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.github.sky.common.vo.MenuVO;
 import com.github.sky.common.vo.UserVO;
+import com.github.sky.rbac.dto.UserInfo;
 import com.github.sky.rbac.entity.SysUser;
 
 import java.util.List;
@@ -28,4 +29,11 @@ public interface SysUserService extends IService<SysUser> {
      */
     boolean register(UserVO userVO);
 
+    /**
+     * 查询用户信息
+     *
+     * @param userVo 角色名
+     * @return userInfo
+     */
+    UserInfo findUserInfo(UserVO userVo);
 }

@@ -8,6 +8,7 @@ import com.github.sky.common.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Auther: haoxin
@@ -30,12 +31,20 @@ public class BaseController {
 
     /**
      * 获取用户详情
-     * @param userId 用户ID
      * @return
      */
-    public UserVO getUserVOByUserId(String userId) {
-        String userVOStr = RedisUtil.get(CommonConstant.USERVO_PRIF+userId);
+    public UserVO getUserVO() {
+        String userVOStr = RedisUtil.get(CommonConstant.USERVO_PRIF+UserUtils.getUserId(request));
         UserVO userVO = JSON.parseObject(userVOStr, UserVO.class);
         return userVO;
+    }
+
+    /**
+     * 根据请求heard中的token获取用户角色
+     *
+     * @return 角色名
+     */
+    public List<String> getRole() {
+        return UserUtils.getRole(request);
     }
 }
