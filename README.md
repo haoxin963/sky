@@ -11,8 +11,13 @@ sky平台是基于spring cloud的微服务接口开发平台，平台的目标�
 - QQ交流群：428135328
 
 ## 相关项目
+### 码云：
 - 前端ui：https://gitee.com/haoxin963/sky-ui
 - 配置git：https://gitee.com/haoxin963/sky-config
+
+### github：
+- 前端ui：https://github.com/haoxin963/sky-ui
+- 配置git：https://github.com/haoxin963/sky-config
 
 ## 功能列表
 - 服务注册发现：使用Eureka实现
